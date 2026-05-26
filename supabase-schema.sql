@@ -100,3 +100,7 @@ CREATE POLICY "Cards são públicos para leitura"
 CREATE POLICY "Usuário faz upload do próprio card"
   ON storage.objects FOR INSERT
   WITH CHECK (bucket_id = 'trade-cards' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Usuário deleta próprio card"
+  ON storage.objects FOR DELETE
+  USING (bucket_id = 'trade-cards' AND auth.uid()::text = (storage.foldername(name))[1]);
