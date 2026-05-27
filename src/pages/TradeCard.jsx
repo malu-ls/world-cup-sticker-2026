@@ -72,6 +72,36 @@ export default function TradeCard() {
     setGenerating(false)
   }
 
+  function buildShareText() {
+    const lines = []
+    lines.push(`📋 *Minhas repetidas — Copa 2026*`)
+    lines.push(`👤 ${userName} · ${stickers.stats.percent}% do álbum completo`)
+    lines.push(``)
+
+    teamGroups.forEach(group => {
+      const flag = group.flag ? `🏳️ ` : ''
+      const chips = group.stickers
+        .map(s => s.extras > 1 ? `${s.code} ×${s.extras}` : s.code)
+        .join('  ·  ')
+      lines.push(`*${group.label}* (${group.stickers.length})`)
+      lines.push(chips)
+      lines.push(``)
+    })
+
+    lines.push(`📊 ${duplicates.length} figurinhas · ${totalExtras} disponíveis para troca`)
+    return lines.join('\n')
+  }
+
+  async function shareAsText() {
+    const text = buildShareText()
+    if (navigator.share) {
+      await navigator.share({ text, title: 'Minhas repetidas — Copa 2026' })
+    } else {
+      await navigator.clipboard.writeText(text)
+      alert('Texto copiado! Cole no WhatsApp 👍')
+    }
+  }
+
   async function shareCard() {
     if (!imageUrl) return
     const blob = await (await fetch(imageUrl)).blob()
@@ -105,12 +135,15 @@ export default function TradeCard() {
           <span className={styles.topExtras}>{totalExtras} para trocar</span>
         </div>
         <div className={styles.topActions}>
+          <button className={styles.textBtn} onClick={shareAsText}>
+            💬 Compartilhar texto
+          </button>
           <button className={styles.generateBtn} onClick={generateCard} disabled={generating}>
-            {generating ? 'Gerando...' : '📸 Gerar card'}
+            {generating ? 'Gerando...' : '📸 Imagem'}
           </button>
           {imageUrl && (
             <button className={styles.shareBtn} onClick={shareCard}>
-              📤 Compartilhar
+              📤
             </button>
           )}
         </div>
@@ -188,17 +221,7 @@ export default function TradeCard() {
                   {group.stickers.map(s => (
                     <div key={s.code} className={`${styles.cardStickerChip} ${s.special ? styles.chipSpecial : ''}`}>
                       <span className={styles.chipCode}>{s.code}</span>
-                      {s.extras > 1 && <span className={styles.chipQty}>+{s.extras}</span>}
-                    </div>
-                  ))}
-                </div>
-
-                <div className={styles.cardStickerList}>
-                  {group.stickers.map(s => (
-                    <div key={s.code} className={styles.cardStickerRow}>
-                      <span className={styles.rowCode}>{s.code}</span>
-                      <span className={styles.rowName}>{s.name}</span>
-                      <span className={styles.rowQty}>+{s.extras} p/ trocar</span>
+                      {s.extras > 1 && <span className={styles.chipQty}>×{s.extras}</span>}
                     </div>
                   ))}
                 </div>

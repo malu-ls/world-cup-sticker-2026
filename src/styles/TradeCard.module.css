@@ -26,6 +26,19 @@
 
 .topActions { display: flex; gap: 8px; }
 
+.textBtn {
+  background: #1a3a4a;
+  color: #60c8f0;
+  border: 1px solid rgba(96,200,240,0.3);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
 .generateBtn {
   background: #FFD700;
   color: #0a1f10;
