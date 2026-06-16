@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useStickers } from '../hooks/useStickers'
 import TeamSection from '../components/TeamSection'
@@ -11,11 +12,18 @@ import styles from '../styles/Home.module.css'
 
 export default function Home() {
   const { user, signOut } = useAuth()
+  const navigate = useNavigate()
   const stickers = useStickers()
   const [tab, setTab] = useState('album')
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const module = localStorage.getItem('worldcup_module') ?? 'album'
+  const handleChangeModule = () => {
+    localStorage.removeItem('worldcup_module')
+    navigate('/modules')
+  }
 
   if (stickers.loading) {
     return (
@@ -75,6 +83,14 @@ export default function Home() {
           {menuOpen && (
             <div className={styles.dropdown}>
               <div className={styles.dropdownUser}>{user?.user_metadata?.full_name || user?.email}</div>
+              {module === 'both' && (
+                <button className={styles.dropdownItem} onClick={() => navigate('/bolao')}>
+                  ⚽ Bolão da Copa
+                </button>
+              )}
+              <button className={styles.dropdownItem} onClick={handleChangeModule}>
+                🔄 Trocar módulo
+              </button>
               <button className={styles.dropdownItem} onClick={signOut}>Sair</button>
             </div>
           )}

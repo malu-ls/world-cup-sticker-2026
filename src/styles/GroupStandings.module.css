@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.group {
+  background: #0f2d18;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  gap: 0.75rem;
+}
+
+.groupBadge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FFD700;
+  flex: 1;
+  text-align: left;
+}
+
+.groupProg {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.chevron {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.table {
+  padding: 0 0.75rem 0.875rem;
+}
+
+.tableHead,
+.row {
+  display: grid;
+  grid-template-columns: 1fr 28px 28px 28px 28px 28px 28px 36px 36px;
+  align-items: center;
+  gap: 0;
+  font-size: 0.68rem;
+}
+
+.tableHead {
+  color: rgba(255,255,255,0.3);
+  font-weight: 700;
+  font-size: 0.62rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 0 0 0.375rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 0.25rem;
+}
+
+.tableHead > span,
+.row > span {
+  text-align: center;
+}
+
+.row {
+  padding: 0.375rem 0;
+  color: rgba(255,255,255,0.6);
+  border-radius: 6px;
+}
+
+.row.qualifies { color: rgba(255,255,255,0.85); }
+.row.maybe     { color: rgba(255,215,0,0.6); }
+
+.colTeam {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  text-align: left !important;
+}
+
+.pos {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.25);
+  width: 12px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.flag {
+  width: 18px;
+  height: 13px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.teamName {
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.colPts {
+  font-weight: 700;
+  color: #FFD700 !important;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.62rem;
+  color: rgba(255,255,255,0.25);
+  margin-top: 0.625rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
