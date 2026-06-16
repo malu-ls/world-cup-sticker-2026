@@ -110,8 +110,9 @@ export function calcLeaderboard(predictions, matches, profiles) {
 }
 
 // ─── Helpers de data ─────────────────────────────────────────────────────────
-export function isPredictionOpen(matchDate) {
-  return new Date(matchDate) > new Date()
+// Palpite aberto enquanto o admin não marcar o jogo como 'live' ou 'finished'
+export function isPredictionOpen(match) {
+  return match.status === 'scheduled'
 }
 
 export function formatMatchDate(dateStr) {

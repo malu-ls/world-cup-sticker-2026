@@ -7,7 +7,7 @@ import styles from '../../styles/MatchCard.module.css'
 export default function MatchCard({ match, myPred, onSave }) {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const open  = isPredictionOpen(match.match_date)
+  const open  = isPredictionOpen(match)
   const pts   = myPred ? calcPoints(myPred, match) : null
   const done  = match.status === 'finished'
   const live  = match.status === 'live'
