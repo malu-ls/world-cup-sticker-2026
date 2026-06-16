@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext'
 import { useBolao } from '../hooks/useBolao'
+import { supabase } from '../lib/supabase'
+import { GROUP_MATCHES } from '../lib/bolaoData'
 import MatchCard from '../components/bolao/MatchCard'
 import GroupStandings from '../components/bolao/GroupStandings'
 import KnockoutBracket from '../components/bolao/KnockoutBracket'
@@ -30,6 +32,34 @@ export default function BolaoHome() {
 
   const isAdmin = user?.email === ADMIN_EMAIL
   const module  = localStorage.getItem('worldcup_module') ?? 'bolao'
+  const [seeding, setSeeding] = useState(false)
+  const [seedError, setSeedError] = useState(null)
+
+  const seedMatches = async () => {
+    setSeeding(true)
+    setSeedError(null)
+    try {
+      const rows = GROUP_MATCHES.map(m => ({
+        stage:        'group',
+        group_name:   m.group,
+        matchday:     m.matchday,
+        match_number: m.matchNumber,
+        home_team:    m.home,
+        away_team:    m.away,
+        match_date:   m.date,
+        venue:        m.venue,
+        city:         m.venue.split(',').slice(-1)[0].trim(),
+        status:       'scheduled',
+      }))
+      const { error } = await supabase.from('bolao_matches').insert(rows)
+      if (error) throw error
+      await bolao.reload()
+    } catch (e) {
+      setSeedError(e.message)
+    } finally {
+      setSeeding(false)
+    }
+  }
 
   const handleChangeModule = () => {
     localStorage.removeItem('worldcup_module')
@@ -41,6 +71,40 @@ export default function BolaoHome() {
       <div className={styles.loading}>
         <div className={styles.spinner} />
         <p>Carregando bolão...</p>
+      </div>
+    )
+  }
+
+  // Tela de setup: tabela existe mas está vazia
+  if (!bolao.loading && bolao.matches.length === 0) {
+    return (
+      <div className={styles.setup}>
+        <div className={styles.setupCard}>
+          <span className={styles.setupIcon}>⚽</span>
+          <h2 className={styles.setupTitle}>Bolão ainda não iniciado</h2>
+          {isAdmin ? (
+            <>
+              <p className={styles.setupDesc}>
+                Clique para carregar o calendário completo da Copa 2026 (72 jogos da fase de grupos).
+              </p>
+              {seedError && <p className={styles.setupError}>{seedError}</p>}
+              <button
+                className={styles.setupBtn}
+                onClick={seedMatches}
+                disabled={seeding}
+              >
+                {seeding ? 'Carregando...' : '⚡ Inicializar Bolão'}
+              </button>
+              <p className={styles.setupHint}>
+                Certifique-se de ter executado o <code>supabase-bolao-schema.sql</code> no Supabase Dashboard antes.
+              </p>
+            </>
+          ) : (
+            <p className={styles.setupDesc}>
+              O administrador ainda não ativou o bolão. Volte em breve!
+            </p>
+          )}
+        </div>
       </div>
     )
   }
