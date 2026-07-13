@@ -6,10 +6,11 @@
 .itemFlag { font-size:20px; }
 .itemCode { font-size:13px; font-weight:600; color:#fff; }
 .itemName { font-size:12px; color:rgba(255,255,255,0.4); margin-top:1px; }
+.itemRightGroup { display:flex; align-items:center; gap:12px; margin-left:auto; }
 .itemRight { display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
 .itemQty { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; color:#fbbf24; }
 .itemExtra { font-size:11px; color:rgba(251,191,36,0.6); }
-.removeBtn { flex-shrink:0; width:30px; height:30px; border-radius:50%; border:1px solid rgba(239,68,68,0.35); background:rgba(239,68,68,0.12); color:#f87171; font-size:14px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.removeBtn { flex-shrink:0; width:30px; height:30px; border-radius:50%; border:1px solid rgba(239,68,68,0.35); background:rgba(239,68,68,0.12); color:#f87171; font-size:14px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
 .removeBtn:active { background:rgba(239,68,68,0.25); }
 .empty { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:50vh; color:rgba(255,255,255,0.4); text-align:center; padding:2rem; gap:12px; }
 .emptyIcon { font-size:48px; }
