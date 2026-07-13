@@ -1,6 +1,6 @@
 import styles from '../styles/DuplicatesTab.module.css'
 
-export default function DuplicatesTab({ duplicates, TEAMS }) {
+export default function DuplicatesTab({ duplicates, TEAMS, onRemoveDuplicate }) {
   const getTeam = (code) => TEAMS.find(t => t.code === code)
 
   if (duplicates.length === 0) {
@@ -35,6 +35,14 @@ export default function DuplicatesTab({ duplicates, TEAMS }) {
                 <span className={styles.itemQty}>×{sticker.qty}</span>
                 <span className={styles.itemExtra}>+{sticker.extras} extra{sticker.extras > 1 ? 's' : ''}</span>
               </div>
+              <button
+                className={styles.removeBtn}
+                onClick={() => onRemoveDuplicate(sticker.code)}
+                aria-label={`Remover repetida de ${sticker.name}`}
+                title="Remover repetida"
+              >
+                ✕
+              </button>
             </div>
           )
         })}

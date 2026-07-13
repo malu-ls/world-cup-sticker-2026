@@ -179,6 +179,7 @@ export default function Home() {
           duplicates={stickers.getDuplicatesList()}
           TEAMS={stickers.TEAMS}
           SPECIAL_SECTIONS={stickers.SPECIAL_SECTIONS}
+          onRemoveDuplicate={stickers.removeDuplicate}
         />
       )}
 
