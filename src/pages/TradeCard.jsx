@@ -116,6 +116,33 @@ export default function TradeCard() {
     }
   }
 
+  function buildMissingShareText() {
+    const lines = []
+    lines.push(`🔎 *Figurinhas que estou buscando — Copa 2026*`)
+    lines.push(`👤 ${userName} · ${stickers.stats.percent}% do álbum completo`)
+    lines.push(``)
+
+    missingGroups.forEach(group => {
+      const chips = group.stickers.map(s => s.code).join('  ·  ')
+      lines.push(`*${group.label}* (${group.stickers.length})`)
+      lines.push(chips)
+      lines.push(``)
+    })
+
+    lines.push(`📊 ${missing.length} figurinhas faltando`)
+    return lines.join('\n')
+  }
+
+  async function shareMissingList() {
+    const text = buildMissingShareText()
+    if (navigator.share) {
+      await navigator.share({ text, title: 'Figurinhas que estou buscando — Copa 2026' })
+    } else {
+      await navigator.clipboard.writeText(text)
+      alert('Texto copiado! Cole no WhatsApp 👍')
+    }
+  }
+
   async function shareCard() {
     if (!imageUrl) return
     const blob = await (await fetch(imageUrl)).blob()
@@ -168,6 +195,13 @@ export default function TradeCard() {
             ))
           )}
         </div>
+        {missingGroups.length > 0 && (
+          <div className={styles.modalFooter}>
+            <button className={styles.modalShareBtn} onClick={shareMissingList}>
+              💬 Compartilhar lista
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -258,6 +258,7 @@
   max-height: 70vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .modalHeader {
@@ -296,10 +297,31 @@
 
 .modalBody {
   overflow-y: auto;
+  flex: 1;
+  min-height: 0;
   padding: 14px 20px 20px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.modalFooter {
+  padding: 12px 20px 20px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+
+.modalShareBtn {
+  width: 100%;
+  background: #1a3a4a;
+  color: #60c8f0;
+  border: 1px solid rgba(96,200,240,0.3);
+  border-radius: 10px;
+  padding: 12px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .modalEmpty {
