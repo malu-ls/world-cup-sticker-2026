@@ -70,10 +70,13 @@ export function useStickers() {
       .filter(s => (collection[s.code] || 0) > 1)
       .map(s => ({ ...s, qty: collection[s.code], extras: collection[s.code] - 1 }))
 
+  const getMissingList = () =>
+    ALL_STICKERS.filter(s => (collection[s.code] || 0) === 0)
+
   return {
     collection, loading, saving,
     markOwned, addDuplicate, removeDuplicate,
-    stats, getTeamStats, getSpecialStats, getDuplicatesList,
+    stats, getTeamStats, getSpecialStats, getDuplicatesList, getMissingList,
     TEAMS, SPECIAL_SECTIONS,
   }
 }

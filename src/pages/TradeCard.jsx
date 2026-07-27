@@ -26,6 +26,7 @@ export default function TradeCard() {
   const [generating, setGenerating] = useState(false)
   const [imageUrl, setImageUrl] = useState(null)
   const [avatarBase64, setAvatarBase64] = useState(null)
+  const [showMissing, setShowMissing] = useState(false)
 
   // Pré-carrega avatar como base64 assim que o componente monta
   useEffect(() => {
@@ -51,6 +52,19 @@ export default function TradeCard() {
 
   const totalExtras = duplicates.reduce((a, s) => a + s.extras, 0)
   const userName = user?.user_metadata?.full_name?.split(' ')[0] || 'Colecionador'
+
+  // Agrupa figurinhas faltando por seleção
+  const missing = stickers.getMissingList()
+  const missingByTeam = {}
+  missing.forEach(s => {
+    if (!missingByTeam[s.team]) missingByTeam[s.team] = []
+    missingByTeam[s.team].push(s)
+  })
+  const missingGroups = Object.entries(missingByTeam).map(([code, stks]) => {
+    const team = stickers.TEAMS.find(t => t.code === code)
+    const special = stickers.SPECIAL_SECTIONS.find(s => s.code === code)
+    return { code, label: team?.name || special?.name || code, flag: team?.iso2, stickers: stks }
+  })
 
   async function generateCard() {
     if (!cardRef.current) return
@@ -116,12 +130,58 @@ export default function TradeCard() {
     }
   }
 
+  const missingModal = showMissing && (
+    <div className={styles.modalOverlay} onClick={() => setShowMissing(false)}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <div>
+            <div className={styles.modalTitle}>Faltando</div>
+            <div className={styles.modalSub}>{missing.length} figurinhas para completar o álbum</div>
+          </div>
+          <button className={styles.modalClose} onClick={() => setShowMissing(false)}>✕</button>
+        </div>
+        <div className={styles.modalBody}>
+          {missingGroups.length === 0 ? (
+            <p className={styles.modalEmpty}>Você já tem todas as figurinhas! 🎉</p>
+          ) : (
+            missingGroups.map(group => (
+              <div key={group.code} className={styles.missingGroup}>
+                <div className={styles.missingGroupHeader}>
+                  {group.flag && (
+                    <img
+                      src={`https://flagcdn.com/w20/${group.flag}.png`}
+                      alt={group.label}
+                      className={styles.missingGroupFlag}
+                    />
+                  )}
+                  <span className={styles.missingGroupName}>{group.label}</span>
+                  <span className={styles.missingGroupCount}>{group.stickers.length}</span>
+                </div>
+                <div className={styles.missingChips}>
+                  {group.stickers.map(s => (
+                    <span key={s.code} className={`${styles.missingChip} ${s.special ? styles.missingChipSpecial : ''}`}>
+                      {s.code}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  )
+
   if (duplicates.length === 0) {
     return (
       <div className={styles.empty}>
         <div className={styles.emptyIcon}>🔄</div>
         <p>Nenhuma repetida ainda.</p>
         <p className={styles.emptySub}>Quando tiver figurinhas repetidas elas aparecem aqui para gerar o card de troca.</p>
+        <button className={styles.missingBtn} onClick={() => setShowMissing(true)}>
+          📋 Ver figurinhas faltando
+        </button>
+        {missingModal}
       </div>
     )
   }
@@ -135,6 +195,9 @@ export default function TradeCard() {
           <span className={styles.topExtras}>{totalExtras} para trocar</span>
         </div>
         <div className={styles.topActions}>
+          <button className={styles.missingBtn} onClick={() => setShowMissing(true)}>
+            📋 Faltando
+          </button>
           <button className={styles.textBtn} onClick={shareAsText}>
             💬 Compartilhar texto
           </button>
@@ -236,6 +299,8 @@ export default function TradeCard() {
           </div>
         </div>
       </div>
+
+      {missingModal}
     </div>
   )
 }
